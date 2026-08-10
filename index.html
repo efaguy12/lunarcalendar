@@ -784,7 +784,7 @@ function calculate() {
     `Você nasceu em ${formatDateBR(birth)}.`;
 
   document.getElementById("birthSummaryLunar").textContent =
-    `No calendário lunar: Ano ${lunarYear.toLocaleString("pt-BR")}, ${lunarMonthName(cycle)}, Dia ${lunarDay}.`;
+    `No calendário lunar: Dia ${lunarDay}, ${lunarMonthName(cycle)}, Ano ${lunarYear.toLocaleString("pt-BR")}.`;
 
 
   // Luas
@@ -835,13 +835,13 @@ function calculate() {
     nextBirthdayDate;
 
   document.getElementById("birthdayMeta").textContent =
-    `Ano Lunar ${nextBirthdayYear.toLocaleString("pt-BR")} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
+    `Dia ${lunarDay} • ${lunarMonthName(cycle)} • Ano Lunar ${nextBirthdayYear.toLocaleString("pt-BR")}`;
 
   document.getElementById("nextBirthdayGregorian").textContent =
     nextBirthdayDate;
 
   document.getElementById("nextBirthdayLunar").textContent =
-    `Ano ${nextBirthdayYear.toLocaleString("pt-BR")} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
+    `Dia ${lunarDay} • ${lunarMonthName(cycle)} • Ano ${nextBirthdayYear.toLocaleString("pt-BR")}`;
 
   document.getElementById("birthdayExplain").textContent =
     `13 ciclos lunares = ${LUNAR_YEAR_LENGTH.toFixed(3).replace(".", ",")} dias. ` +
@@ -852,7 +852,7 @@ function calculate() {
     ageLunar.toLocaleString("pt-BR");
 
   document.getElementById("summaryBirthLunar").textContent =
-    `Ano ${lunarYear} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
+    `Dia ${lunarDay} • ${lunarMonthName(cycle)} • Ano ${lunarYear}`;
 
   document.getElementById("summaryNextGregorian").textContent =
     `${String(nextBirthday.d).padStart(2, "0")}/${String(nextBirthday.m).padStart(2, "0")}/${nextBirthday.y}`;
