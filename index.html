@@ -5,479 +5,741 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora Lunar</title>
 <style>
-  :root{
-    --bg:#0d1020;
-    --card:#171b30;
-    --card2:#11152a;
-    --text:#f4f1ea;
-    --muted:#a9abc0;
-    --gold:#e6bd68;
-    --violet:#9b82d7;
-    --line:#2b3150;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; min-height:100vh;
-    font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(circle at 50% -10%, #31365c 0, transparent 38%),
-      radial-gradient(circle at 15% 80%, #171a38 0, transparent 30%),
-      var(--bg);
-    display:flex; align-items:center; justify-content:center;
-    padding:28px;
-  }
-  .app{width:min(920px,100%)}
-  header{text-align:center;margin-bottom:24px}
-  .moon{font-size:44px;margin-bottom:4px}
-  h1{margin:0;font-size:32px;font-weight:600;letter-spacing:.3px}
-  .sub{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:620px;line-height:1.5}
-  .card{
-    background:linear-gradient(145deg,rgba(23,27,48,.96),rgba(14,18,35,.96));
-    border:1px solid var(--line); border-radius:22px;
-    box-shadow:0 22px 70px rgba(0,0,0,.35);
-    padding:26px;
-  }
-  .form{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}
-  label{display:block;color:var(--muted);font-size:13px;margin:0 0 7px}
-  input{
-    width:100%;height:50px;border-radius:12px;border:1px solid #363c5b;
-    background:#0c1020;color:var(--text);padding:0 14px;font-size:16px;
-    outline:none;
-  }
-  input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(155,130,215,.12)}
-  button{
-    height:50px;padding:0 22px;border:0;border-radius:12px;
-    background:linear-gradient(135deg,var(--gold),#c99742);
-    color:#17130b;font-weight:700;font-size:15px;cursor:pointer;
-  }
-  button:hover{filter:brightness(1.08)}
-  .results{display:none;margin-top:24px}
-  .birthSummary{
-    text-align:center;padding:22px 18px;margin-bottom:14px;
-    border:1px solid rgba(155,130,215,.35);border-radius:18px;
-    background:linear-gradient(135deg,rgba(155,130,215,.12),rgba(230,189,104,.07));
-  }
-  .birthSummaryIcon{font-size:30px;margin-bottom:5px}
-  .birthSummaryLabel{
-    font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted)
-  }
-  .birthSummaryText{
-    font-size:25px;font-weight:700;color:var(--text);margin:7px 0 5px
-  }
-  .birthSummaryLunar{
-    font-size:15px;color:var(--gold);font-weight:600
-  }
-  .hero{
-    text-align:center;padding:24px 18px;margin-bottom:14px;
-    border:1px solid #363c5b;border-radius:18px;
-    background:radial-gradient(circle at 50% 20%,rgba(155,130,215,.18),transparent 55%),var(--card2);
-  }
-  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
-  .big{font-size:46px;font-weight:700;color:var(--gold);margin:4px 0}
-  .big span{font-size:17px;color:var(--muted);font-weight:500}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .metric{
-    border:1px solid var(--line);border-radius:16px;padding:18px;
-    background:rgba(10,14,28,.55)
-  }
-  .metric .label{margin-bottom:7px}
-  .value{font-size:22px;font-weight:650}
-  .small{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
-  .phase{
-    display:flex;align-items:center;gap:16px;margin-top:14px;
-    border:1px solid var(--line);border-radius:16px;padding:16px 18px;
-  }
-  .phaseMoon{font-size:40px;min-width:52px;text-align:center}
-  .phaseTitle{font-weight:650}
-  .phaseText{font-size:12px;color:var(--muted);margin-top:3px}
-  .currentDateBox{
-    margin-top:14px;padding:18px;border:1px solid var(--line);
-    border-radius:16px;background:rgba(10,14,28,.55);
-  }
-  .currentDateGrid,.birthdayCalendarGrid{
-    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;
-  }
-  .currentDateGrid>div,.birthdayCalendarGrid>div{
-    border:1px solid var(--line);border-radius:12px;padding:12px;
-    background:rgba(0,0,0,.12);
-  }
-  .miniLabel{font-size:11px;color:var(--muted);margin-bottom:5px}
-  .miniValue{font-size:16px;font-weight:650;line-height:1.35}
-  .birthday{
-    margin-top:14px;padding:20px;border:1px solid rgba(230,189,104,.35);
-    border-radius:16px;background:linear-gradient(135deg,rgba(230,189,104,.08),rgba(155,130,215,.08));
-    text-align:center;
-  }
-  .birthdayTitle{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px}
-  .birthdayDate{font-size:30px;font-weight:700;color:var(--gold);margin:7px 0}
-  .birthdayMeta{font-size:13px;color:var(--text)}
-  .birthdayExplain{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
-  .note{
-    margin-top:16px;color:#989bb0;font-size:11px;line-height:1.55;text-align:center
-  }
-  .sourceBox{
-    display:flex;gap:13px;align-items:flex-start;margin-top:16px;
-    padding:15px 17px;border:1px solid rgba(230,189,104,.30);
-    border-radius:15px;background:linear-gradient(135deg,rgba(230,189,104,.07),rgba(155,130,215,.07));
-  }
-  .sourceIcon{font-size:24px;line-height:1}
-  .sourceTitle{
-    color:var(--gold);font-size:12px;font-weight:700;
-    text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px;
-  }
-  .sourceText{color:var(--muted);font-size:12px;line-height:1.5}
-  .sourceText strong{color:var(--text)}
-  .sourceLink{
-    display:inline-block;margin-top:7px;color:#c9b8f0;font-size:12px;
-    text-decoration:none;font-weight:600;
-  }
-  .sourceLink:hover{text-decoration:underline}
-  .error{display:none;margin-top:14px;color:#f0b2b2;background:#3a2028;border:1px solid #6a3945;padding:12px;border-radius:12px;font-size:13px}
-  @media(max-width:680px){
-    .form{grid-template-columns:1fr}
-    .grid{grid-template-columns:1fr}
-    .currentDateGrid,.birthdayCalendarGrid{grid-template-columns:1fr}
-    button{width:100%}
-    .big{font-size:38px}
-  }
+:root{
+  --bg:#0d1020;--card:#171b30;--card2:#11152a;
+  --text:#f4f1ea;--muted:#a9abc0;--gold:#e6bd68;
+  --violet:#9b82d7;--line:#2b3150;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;padding:28px;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 50% -10%,#31365c 0,transparent 38%),
+    radial-gradient(circle at 15% 80%,#171a38 0,transparent 30%),var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.app{width:min(920px,100%)}
+header{text-align:center;margin-bottom:24px}
+.moon{font-size:44px;margin-bottom:4px}
+h1{margin:0;font-size:32px;font-weight:600}
+.sub{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:620px;line-height:1.5}
+.card{
+  background:linear-gradient(145deg,rgba(23,27,48,.96),rgba(14,18,35,.96));
+  border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 22px 70px rgba(0,0,0,.35);padding:26px;
+}
+.form{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}
+label{display:block;color:var(--muted);font-size:13px;margin:0 0 7px}
+input{
+  width:100%;height:50px;border-radius:12px;border:1px solid #363c5b;
+  background:#0c1020;color:var(--text);padding:0 14px;font-size:16px;outline:none;
+}
+input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(155,130,215,.12)}
+button{
+  height:50px;padding:0 22px;border:0;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),#c99742);
+  color:#17130b;font-weight:700;font-size:15px;cursor:pointer;
+}
+button:hover{filter:brightness(1.08)}
+
+.agePreview{
+  margin-top:10px;padding:12px 14px;border:1px solid var(--line);
+  border-radius:12px;background:rgba(10,14,28,.55);
+}
+.ageLine{font-size:13px;line-height:1.5}
+.ageLine+.ageLine{margin-top:3px}
+.ageLine strong{font-size:15px}
+.ageLine.lunar{color:var(--gold)}
+.ageLine.solar{color:var(--muted)}
+
+.sourceBox{
+  display:flex;gap:13px;align-items:flex-start;margin-top:16px;
+  padding:15px 17px;border:1px solid rgba(230,189,104,.30);
+  border-radius:15px;background:linear-gradient(135deg,rgba(230,189,104,.07),rgba(155,130,215,.07));
+}
+.sourceIcon{font-size:24px;line-height:1}
+.sourceTitle{color:var(--gold);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px}
+.sourceText{color:var(--muted);font-size:12px;line-height:1.5}
+.sourceText strong{color:var(--text)}
+.sourceLink{display:inline-block;margin-top:7px;color:#c9b8f0;font-size:12px;text-decoration:none;font-weight:600}
+.sourceLink:hover{text-decoration:underline}
+
+.error{display:none;margin-top:14px;color:#f0b2b2;background:#3a2028;border:1px solid #6a3945;padding:12px;border-radius:12px;font-size:13px}
+
+.results{display:none;margin-top:24px}
+.birthSummary{
+  text-align:center;padding:22px 18px;margin-bottom:14px;
+  border:1px solid rgba(155,130,215,.35);border-radius:18px;
+  background:linear-gradient(135deg,rgba(155,130,215,.12),rgba(230,189,104,.07));
+}
+.birthSummaryIcon{font-size:30px;margin-bottom:5px}
+.birthSummaryLabel{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted)}
+.birthSummaryText{font-size:25px;font-weight:700;color:var(--text);margin:7px 0 5px}
+.birthSummaryLunar{font-size:15px;color:var(--gold);font-weight:600}
+
+.hero{
+  text-align:center;padding:24px 18px;margin-bottom:14px;
+  border:1px solid #363c5b;border-radius:18px;
+  background:radial-gradient(circle at 50% 20%,rgba(155,130,215,.18),transparent 55%),var(--card2);
+}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
+.big{font-size:46px;font-weight:700;color:var(--gold);margin:4px 0}
+.big span{font-size:17px;color:var(--muted);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.metric{border:1px solid var(--line);border-radius:16px;padding:18px;background:rgba(10,14,28,.55)}
+.metric .label{margin-bottom:7px}
+.value{font-size:22px;font-weight:650}
+.small{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
+
+.phase{
+  display:flex;align-items:center;gap:16px;margin-top:14px;
+  border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+}
+.phaseMoon{font-size:40px;min-width:52px;text-align:center}
+.phaseTitle{font-weight:650}
+.phaseText{font-size:12px;color:var(--muted);margin-top:3px}
+
+.currentDateBox{
+  margin-top:14px;padding:18px;border:1px solid var(--line);
+  border-radius:16px;background:rgba(10,14,28,.55);
+}
+.currentDateGrid,.birthdayCalendarGrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;
+}
+.currentDateGrid>div,.birthdayCalendarGrid>div{
+  border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(0,0,0,.12);
+}
+.miniLabel{font-size:11px;color:var(--muted);margin-bottom:5px}
+.miniValue{font-size:16px;font-weight:650;line-height:1.35}
+
+.birthday{
+  margin-top:14px;padding:20px;border:1px solid rgba(230,189,104,.35);
+  border-radius:16px;background:linear-gradient(135deg,rgba(230,189,104,.08),rgba(155,130,215,.08));
+  text-align:center;
+}
+.birthdayTitle{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px}
+.birthdayDate{font-size:30px;font-weight:700;color:var(--gold);margin:7px 0}
+.birthdayMeta{font-size:13px;color:var(--text)}
+.birthdayExplain{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
+
+.note{margin-top:16px;color:#989bb0;font-size:11px;line-height:1.55;text-align:center}
+
+@media(max-width:680px){
+  .form{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .currentDateGrid,.birthdayCalendarGrid{grid-template-columns:1fr}
+  button{width:100%}
+  .big{font-size:38px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
-  <header>
-    <div class="moon">🌙</div>
-    <h1>Calculadora Lunar</h1>
-    <div class="sub">
-      Converta uma data do calendário gregoriano para uma contagem baseada
-      no ciclo lunar médio. Cada 13 ciclos = 1 ano lunar.
-    </div>
-  </header>
 
-  <main class="card">
-    <div class="form">
+<header>
+  <div class="moon">🌙</div>
+  <h1>Calculadora Lunar</h1>
+  <div class="sub">
+    Converta uma data do calendário gregoriano para uma contagem baseada
+    no ciclo lunar médio. Cada 13 ciclos = 1 ano lunar.
+  </div>
+</header>
+
+<main class="card">
+
+  <div class="form">
+    <div>
+      <label for="birth">Data de nascimento</label>
+      <input id="birth" type="date" min="0001-01-01" max="9999-12-31">
+
+      <div class="agePreview">
+        <div class="ageLine lunar">
+          🌙 Você tem <strong id="ageLunar">—</strong> anos lunares
+        </div>
+        <div class="ageLine solar">
+          ☀️ Você tem <strong id="ageSolar">—</strong> anos no calendário comum
+        </div>
+      </div>
+    </div>
+
+    <button id="calc">Calcular</button>
+  </div>
+
+  <div class="sourceBox">
+    <div class="sourceIcon">✨</div>
+    <div>
+      <div class="sourceTitle">Base dos ensinamentos</div>
+      <div class="sourceText">
+        Esta calculadora foi construída a partir da explicação do
+        <strong>Amado Comandante Athom</strong>, apresentada no FAQ de
+        <strong>28/07</strong>.
+      </div>
+      <a class="sourceLink" href="https://youtube.com/live/mZsXvGgg9xs" target="_blank" rel="noopener">
+        ▶ Assistir ao vídeo do FAQ com Comandante Athom
+      </a>
+    </div>
+  </div>
+
+  <div id="error" class="error"></div>
+
+  <section id="results" class="results">
+
+    <div class="birthSummary">
+      <div class="birthSummaryIcon">🌙</div>
+      <div class="birthSummaryLabel">Sua data de nascimento</div>
+      <div class="birthSummaryText" id="birthSummaryText">Você nasceu em —</div>
+      <div class="birthSummaryLunar" id="birthSummaryLunar">No calendário lunar: —</div>
+    </div>
+
+    <div class="hero">
+      <div class="eyebrow">Valor em luas desde o Ano 01</div>
+      <div class="big" id="lunas">— <span>luas</span></div>
+      <div class="small" id="daysLine">— dias transcorridos</div>
+    </div>
+
+    <div class="grid">
+      <div class="metric">
+        <div class="label">Ano lunar</div>
+        <div class="value" id="lunarYear">—</div>
+        <div class="small">13 ciclos por ano</div>
+      </div>
+      <div class="metric">
+        <div class="label">Ciclo atual</div>
+        <div class="value" id="cycle">— / 13</div>
+        <div class="small">ciclo lunar dentro do ano</div>
+      </div>
+      <div class="metric">
+        <div class="label">Dia do ciclo</div>
+        <div class="value" id="cycleDay">—</div>
+        <div class="small">aprox. 29,53 dias por ciclo</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phaseMoon" id="phaseMoon">🌑</div>
       <div>
-        <label for="birth">Data de nascimento</label>
-        <input id="birth" type="date" min="0001-01-01" max="9999-12-31">
-        <div class="agePreview">
-  <div>🌙 Você tem <strong id="ageLunar">—</strong> anos lunares</div>
-  <div>☀️ Você tem <strong id="ageSolar">—</strong> anos no calendário comum</div>
-</div>
-      </div>
-      <button id="calc">Calcular</button>
-    </div>
-
-    <div class="sourceBox">
-      <div class="sourceIcon">✨</div>
-      <div>
-        <div class="sourceTitle">Base dos ensinamentos</div>
-        <div class="sourceText">
-          Esta calculadora foi construída a partir da explicação do
-          <strong>Amado Comandante Athom</strong>, apresentada no FAQ de
-          <strong>28/07</strong>.
-        </div>
-        <a class="sourceLink" href="https://youtube.com/live/mZsXvGgg9xs" target="_blank" rel="noopener">
-          ▶ Assistir ao vídeo do FAQ com Comandante Athom
-        </a>
+        <div class="phaseTitle" id="phaseName">—</div>
+        <div class="phaseText" id="phaseDesc">—</div>
       </div>
     </div>
 
-    <div id="error" class="error"></div>
-
-    <section id="results" class="results">
-
-      <div class="birthSummary">
-        <div class="birthSummaryIcon">🌙</div>
-        <div class="birthSummaryLabel">Sua data de nascimento</div>
-        <div class="birthSummaryText" id="birthSummaryText">Você nasceu em —</div>
-        <div class="birthSummaryLunar" id="birthSummaryLunar">No calendário lunar: —</div>
-      </div>
-
-      <div class="hero">
-        <div class="eyebrow">Valor em luas desde o Ano 01</div>
-        <div class="big" id="lunas">— <span>luas</span></div>
-        <div class="small" id="daysLine">— dias transcorridos</div>
-      </div>
-
-      <div class="grid">
-        <div class="metric">
-          <div class="label">Ano lunar</div>
-          <div class="value" id="lunarYear">—</div>
-          <div class="small">13 ciclos por ano</div>
-        </div>
-        <div class="metric">
-          <div class="label">Ciclo atual</div>
-          <div class="value" id="cycle">— / 13</div>
-          <div class="small">ciclo lunar dentro do ano</div>
-        </div>
-        <div class="metric">
-          <div class="label">Dia do ciclo</div>
-          <div class="value" id="cycleDay">—</div>
-          <div class="small">aprox. 29,53 dias por ciclo</div>
-        </div>
-      </div>
-
-      <div class="phase">
-        <div class="phaseMoon" id="phaseMoon">🌑</div>
+    <div class="currentDateBox">
+      <div class="birthdayTitle">📅 Data de hoje</div>
+      <div class="currentDateGrid">
         <div>
-          <div class="phaseTitle" id="phaseName">—</div>
-          <div class="phaseText" id="phaseDesc">—</div>
+          <div class="miniLabel">Calendário normal</div>
+          <div class="miniValue" id="todayGregorian">—</div>
+        </div>
+        <div>
+          <div class="miniLabel">Calendário lunar</div>
+          <div class="miniValue" id="todayLunar">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="birthday">
+      <div class="birthdayTitle">🎂 Seu próximo aniversário lunar</div>
+      <div class="birthdayDate" id="nextBirthday">—</div>
+      <div class="birthdayMeta" id="birthdayMeta">—</div>
+
+      <div class="birthdayCalendarGrid">
+        <div>
+          <div class="miniLabel">Calendário normal</div>
+          <div class="miniValue" id="nextBirthdayGregorian">—</div>
+        </div>
+        <div>
+          <div class="miniLabel">Calendário lunar</div>
+          <div class="miniValue" id="nextBirthdayLunar">—</div>
         </div>
       </div>
 
-      <div class="currentDateBox">
-        <div class="birthdayTitle">📅 Data de hoje</div>
-        <div class="currentDateGrid">
-          <div>
-            <div class="miniLabel">Calendário normal</div>
-            <div class="miniValue" id="todayGregorian">—</div>
-          </div>
-          <div>
-            <div class="miniLabel">Calendário lunar</div>
-            <div class="miniValue" id="todayLunar">—</div>
-          </div>
-        </div>
-      </div>
+      <div class="birthdayExplain" id="birthdayExplain">—</div>
+    </div>
 
-      <div class="birthday">
-        <div class="birthdayTitle">🎂 Seu próximo aniversário lunar</div>
-        <div class="birthdayDate" id="nextBirthday">—</div>
-        <div class="birthdayMeta" id="birthdayMeta">—</div>
-        <div class="birthdayCalendarGrid">
-          <div>
-            <div class="miniLabel">Calendário normal</div>
-            <div class="miniValue" id="nextBirthdayGregorian">—</div>
-          </div>
-          <div>
-            <div class="miniLabel">Calendário lunar</div>
-            <div class="miniValue" id="nextBirthdayLunar">—</div>
-          </div>
-        </div>
-        <div class="birthdayExplain" id="birthdayExplain">—</div>
-      </div>
+    <div class="note">
+      Modelo matemático usado nesta calculadora: 1 ciclo lunar = 29,530588853 dias
+      (mês sinódico médio) e 13 ciclos = 1 ano lunar. Os ensinamentos aqui apresentados
+      são baseados na explicação do Amado Comandante Athom no FAQ de 28/07.
+      A conversão matemática é uma interpretação deste modelo, não um calendário histórico comprovado.
+    </div>
 
-      <div class="note">
-        Modelo matemático usado nesta calculadora: 1 ciclo lunar = 29,530588853 dias
-        (mês sinódico médio) e 13 ciclos = 1 ano lunar. Os ensinamentos aqui apresentados
-        são baseados na explicação do Amado Comandante Athom no FAQ de 28/07. A conversão
-        matemática é uma interpretação deste modelo, não um calendário histórico comprovado.
-      </div>
-    </section>
-  </main>
+  </section>
+</main>
 </div>
 
 <script>
+/*
+  ============================================================
+  CONFIGURAÇÃO
+  ============================================================
+*/
 const SYNODIC = 29.530588853;
 const CYCLES_PER_YEAR = 13;
+const LUNAR_YEAR_LENGTH = SYNODIC * CYCLES_PER_YEAR;
 
-// Dias civis decorridos desde 01/01/0001 (dia inicial = 0).
-// Usa calendário gregoriano proléptico para manter o cálculo consistente.
-function daysFromYear1(y, m, d){
-  // Howard Hinnant - days_from_civil, adaptado para ano >= 1.
-  y -= (m <= 2) ? 1 : 0;
-  const era = Math.floor(y / 400);
-  const yoe = y - era * 400;
+
+/*
+  ============================================================
+  CONVERSÃO DE DATA -> DIAS DESDE 01/01/0001
+  ============================================================
+*/
+function daysFromYear1(y, m, d) {
+  let yy = y - (m <= 2 ? 1 : 0);
+
+  const era = Math.floor(yy / 400);
+  const yoe = yy - era * 400;
+
   const mp = m + (m > 2 ? -3 : 9);
-  const doy = Math.floor((153 * mp + 2) / 5) + d - 1;
-  const doe = yoe * 365 + Math.floor(yoe / 4) - Math.floor(yoe / 100) + doy;
+
+  const doy =
+    Math.floor((153 * mp + 2) / 5) + d - 1;
+
+  const doe =
+    yoe * 365 +
+    Math.floor(yoe / 4) -
+    Math.floor(yoe / 100) +
+    doy;
+
   const absolute = era * 146097 + doe;
-  return absolute - (-1); // 01/01/0001 = 0
+
+  return absolute + 1;
 }
 
-function parseLocalDate(value){
-  const [y,m,d] = value.split("-").map(Number);
-  return {y,m,d};
-}
 
-function moonPhase(dayInCycle){
-  const f = dayInCycle / SYNODIC;
-  if (f < 0.03 || f >= 0.97) return ["🌑","Lua Nova","início do ciclo"];
-  if (f < 0.22) return ["🌒","Lua Crescente","crescendo"];
-  if (f < 0.28) return ["🌓","Quarto Crescente","primeiro quarto"];
-  if (f < 0.47) return ["🌔","Gibosa Crescente","aproximando-se da cheia"];
-  if (f < 0.53) return ["🌕","Lua Cheia","meio do ciclo"];
-  if (f < 0.72) return ["🌖","Gibosa Minguante","após a cheia"];
-  if (f < 0.78) return ["🌗","Quarto Minguante","último quarto"];
-  if (f < 0.97) return ["🌘","Lua Minguante","encerrando o ciclo"];
-  return ["🌑","Lua Nova","início do ciclo"];
-}
+/*
+  ============================================================
+  CONVERSÃO DE DIAS -> DATA
+  ============================================================
+*/
+function civilFromDays(z) {
+  z -= 1;
 
-function civilFromDays(z){
-  // Inverse of the proleptic Gregorian day-count used above.
-  z += -1;
   const era = Math.floor(z / 146097);
   const doe = z - era * 146097;
-  const yoe = Math.floor((doe - Math.floor(doe/1460) + Math.floor(doe/36524) - Math.floor(doe/146096)) / 365);
+
+  const yoe = Math.floor(
+    (doe -
+      Math.floor(doe / 1460) +
+      Math.floor(doe / 36524) -
+      Math.floor(doe / 146096)) / 365
+  );
+
   let y = yoe + era * 400;
-  const doy = doe - (365*yoe + Math.floor(yoe/4) - Math.floor(yoe/100));
-  const mp = Math.floor((5*doy + 2)/153);
-  const d = doy - Math.floor((153*mp+2)/5) + 1;
+
+  const doy =
+    doe -
+    (365 * yoe +
+      Math.floor(yoe / 4) -
+      Math.floor(yoe / 100));
+
+  const mp = Math.floor((5 * doy + 2) / 153);
+
+  const d =
+    doy -
+    Math.floor((153 * mp + 2) / 5) +
+    1;
+
   const m = mp + (mp < 10 ? 3 : -9);
-  y += (m <= 2) ? 1 : 0;
-  return {y,m,d};
+
+  y += m <= 2 ? 1 : 0;
+
+  return { y, m, d };
 }
 
-function formatDateBR(dateObj){
-  const names = ["","janeiro","fevereiro","março","abril","maio","junho",
-                 "julho","agosto","setembro","outubro","novembro","dezembro"];
-  return `${String(dateObj.d).padStart(2,"0")} de ${names[dateObj.m]} de ${dateObj.y}`;
+
+/*
+  ============================================================
+  FORMATAÇÃO DE DATA
+  ============================================================
+*/
+function formatDateBR(date) {
+  const names = [
+    "",
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro"
+  ];
+
+  return `${String(date.d).padStart(2, "0")} de ${names[date.m]} de ${date.y}`;
 }
 
-function calculate(){
+
+/*
+  ============================================================
+  FASE DA LUA
+  ============================================================
+*/
+function moonPhase(dayInCycle) {
+  const fraction = dayInCycle / SYNODIC;
+
+  if (fraction < 0.03 || fraction >= 0.97)
+    return ["🌑", "Lua Nova", "início do ciclo"];
+
+  if (fraction < 0.22)
+    return ["🌒", "Lua Crescente", "crescendo"];
+
+  if (fraction < 0.28)
+    return ["🌓", "Quarto Crescente", "primeiro quarto"];
+
+  if (fraction < 0.47)
+    return ["🌔", "Gibosa Crescente", "aproximando-se da cheia"];
+
+  if (fraction < 0.53)
+    return ["🌕", "Lua Cheia", "meio do ciclo"];
+
+  if (fraction < 0.72)
+    return ["🌖", "Gibosa Minguante", "após a cheia"];
+
+  if (fraction < 0.78)
+    return ["🌗", "Quarto Minguante", "último quarto"];
+
+  return ["🌘", "Lua Minguante", "encerrando o ciclo"];
+}
+
+
+/*
+  ============================================================
+  IDADE NO CALENDÁRIO NORMAL
+  ============================================================
+*/
+function solarAge(birth, today) {
+  let age = today.y - birth.y;
+
+  if (
+    today.m < birth.m ||
+    (today.m === birth.m && today.d < birth.d)
+  ) {
+    age--;
+  }
+
+  return Math.max(0, age);
+}
+
+
+/*
+  ============================================================
+  DATA ATUAL
+  ============================================================
+*/
+function getToday() {
+  const now = new Date();
+
+  return {
+    y: now.getFullYear(),
+    m: now.getMonth() + 1,
+    d: now.getDate()
+  };
+}
+
+
+/*
+  ============================================================
+  CÁLCULO PRINCIPAL
+  ============================================================
+*/
+function calculate() {
+
   const input = document.getElementById("birth").value;
   const error = document.getElementById("error");
   const results = document.getElementById("results");
-  if(!input){
+
+  if (!input) {
     error.textContent = "Escolha uma data de nascimento.";
     error.style.display = "block";
     results.style.display = "none";
     return;
   }
 
-  const {y,m,d} = parseLocalDate(input);
-  if(y < 1){
-    error.textContent = "A data deve ser a partir do Ano 01.";
+  const [y, m, d] = input.split("-").map(Number);
+
+  if (!y || !m || !d || y < 1) {
+    error.textContent = "Escolha uma data válida a partir do Ano 01.";
     error.style.display = "block";
+    results.style.display = "none";
     return;
   }
 
-  const days = daysFromYear1(y,m,d);
-  const totalLunas = days / SYNODIC;
 
-  // CALCULAR IDADE
-const now = new Date();
+  /*
+    ----------------------------
+    DATA DE NASCIMENTO
+    ----------------------------
+  */
 
-const today = {
-  y: now.getFullYear(),
-  m: now.getMonth() + 1,
-  d: now.getDate()
-};
+  const birth = { y, m, d };
 
-const todayDays = daysFromYear1(
-  today.y,
-  today.m,
-  today.d
-);
+  const birthDays =
+    daysFromYear1(y, m, d);
 
-const ageDays = Math.max(0, todayDays - days);
+  const totalLunas =
+    birthDays / SYNODIC;
 
-// 1 ano lunar = 13 ciclos de 29,530588853 dias
-const lunarYearLength = SYNODIC * CYCLES_PER_YEAR;
 
-// Idade em anos lunares completos
-const ageLunar = Math.floor(
-  ageDays / lunarYearLength
-);
+  /*
+    ----------------------------
+    DATA DE HOJE
+    ----------------------------
+  */
 
-// Idade em anos do calendário comum
-let ageSolar = today.y - y;
+  const today = getToday();
 
-if (
-  today.m < m ||
-  (today.m === m && today.d < d)
-) {
-  ageSolar--;
-}
+  const todayDays =
+    daysFromYear1(today.y, today.m, today.d);
 
-document.getElementById("ageLunar").textContent =
-  ageLunar.toLocaleString("pt-BR");
 
-document.getElementById("ageSolar").textContent =
-  ageSolar.toLocaleString("pt-BR");
+  /*
+    ----------------------------
+    IDADES
+    ----------------------------
+  */
 
-  const birthDateObj = {y,m,d};
-  const birthDateText = formatDateBR(birthDateObj);
+  const elapsedDays =
+    Math.max(0, todayDays - birthDays);
 
-  // A primeira lua é o intervalo [0, 1) e o primeiro ano lunar é 1.
-  const lunarYear = Math.floor(totalLunas / CYCLES_PER_YEAR) + 1;
-  const cycleZero = totalLunas % CYCLES_PER_YEAR;
-  const cycle = Math.floor(cycleZero) + 1;
-  const dayInCycle = (cycleZero - Math.floor(cycleZero)) * SYNODIC;
-  const lunarDay = Math.floor(dayInCycle) + 1;
+  const ageLunar =
+    Math.floor(elapsedDays / LUNAR_YEAR_LENGTH);
 
-  // Um "ano lunar" = 13 ciclos sinódicos.
-  // O aniversário lunar preserva a mesma Lua e o mesmo dia dentro dela.
-  const lunarYearLength = SYNODIC * CYCLES_PER_YEAR;
+  const ageSolar =
+    solarAge(birth, today);
 
-  // Data de hoje, em dias desde 01/01/0001.
-  const now = new Date();
-  const today = { y: now.getFullYear(), m: now.getMonth()+1, d: now.getDate() };
-  const todayDays = daysFromYear1(today.y, today.m, today.d);
 
-  // Encontra a próxima ocorrência do aniversário lunar após hoje.
-  // A pessoa mantém a mesma posição fracionária dentro da Lua.
-  const birthPosition = totalLunas;
-  let anniversaryIndex = Math.floor((todayDays - birthPosition * SYNODIC) / lunarYearLength) + 1;
-  if (anniversaryIndex < 1) anniversaryIndex = 1;
+  /*
+    ----------------------------
+    DATA LUNAR DO NASCIMENTO
+    ----------------------------
+  */
 
-  let nextBirthdayDays = birthPosition * SYNODIC + anniversaryIndex * lunarYearLength;
+  const lunarYear =
+    Math.floor(totalLunas / CYCLES_PER_YEAR) + 1;
+
+  const cyclePosition =
+    totalLunas % CYCLES_PER_YEAR;
+
+  const cycle =
+    Math.floor(cyclePosition) + 1;
+
+  const dayInCycle =
+    (cyclePosition - Math.floor(cyclePosition)) * SYNODIC;
+
+  const lunarDay =
+    Math.floor(dayInCycle) + 1;
+
+
+  /*
+    ----------------------------
+    FASE DA LUA
+    ----------------------------
+  */
+
+  const [emoji, phaseName, phaseDesc] =
+    moonPhase(dayInCycle);
+
+
+  /*
+    ----------------------------
+    DATA LUNAR DE HOJE
+    ----------------------------
+  */
+
+  const todayLunas =
+    todayDays / SYNODIC;
+
+  const todayLunarYear =
+    Math.floor(todayLunas / CYCLES_PER_YEAR) + 1;
+
+  const todayCyclePosition =
+    todayLunas % CYCLES_PER_YEAR;
+
+  const todayCycle =
+    Math.floor(todayCyclePosition) + 1;
+
+  const todayDayInCycle =
+    (todayCyclePosition -
+      Math.floor(todayCyclePosition)) * SYNODIC;
+
+  const todayLunarDay =
+    Math.floor(todayDayInCycle) + 1;
+
+
+  /*
+    ----------------------------
+    PRÓXIMO ANIVERSÁRIO LUNAR
+    ----------------------------
+  */
+
+  /*
+    Mantemos exatamente a mesma posição
+    dentro do ciclo lunar.
+
+    O aniversário seguinte ocorre
+    exatamente 13 luas depois.
+  */
+
+  const birthLunarPosition =
+    birthDays / SYNODIC;
+
+  let anniversaryIndex =
+    Math.floor(
+      (todayDays - birthDays) /
+      LUNAR_YEAR_LENGTH
+    ) + 1;
+
+  if (anniversaryIndex < 1)
+    anniversaryIndex = 1;
+
+  let nextBirthdayDays =
+    birthDays +
+    anniversaryIndex * LUNAR_YEAR_LENGTH;
+
   while (nextBirthdayDays < todayDays) {
     anniversaryIndex++;
-    nextBirthdayDays = birthPosition * SYNODIC + anniversaryIndex * lunarYearLength;
+    nextBirthdayDays =
+      birthDays +
+      anniversaryIndex * LUNAR_YEAR_LENGTH;
   }
 
-  const nextBirthdayCivil = civilFromDays(Math.round(nextBirthdayDays));
-  const nextYearLunar = Math.floor(nextBirthdayDays / lunarYearLength) + 1;
-  const nextDateText = formatDateBR(nextBirthdayCivil);
-  const solarAdvance = nextBirthdayDays - todayDays;
+  const nextBirthday =
+    civilFromDays(Math.round(nextBirthdayDays));
 
-  const [emoji,name,desc] = moonPhase(dayInCycle);
+  const nextBirthdayLunas =
+    nextBirthdayDays / SYNODIC;
 
-  // Data lunar de hoje.
-  const todayLunas = todayDays / SYNODIC;
-  const todayLunarYear = Math.floor(todayLunas / CYCLES_PER_YEAR) + 1;
-  const todayCycleZero = todayLunas % CYCLES_PER_YEAR;
-  const todayCycle = Math.floor(todayCycleZero) + 1;
-  const todayDayInCycle = (todayCycleZero - Math.floor(todayCycleZero)) * SYNODIC;
-  const todayLunarDay = Math.floor(todayDayInCycle) + 1;
+  const nextBirthdayYear =
+    Math.floor(
+      nextBirthdayLunas /
+      CYCLES_PER_YEAR
+    ) + 1;
 
+  const nextBirthdayDate =
+    formatDateBR(nextBirthday);
+
+  const daysUntil =
+    nextBirthdayDays - todayDays;
+
+
+  /*
+    ============================================================
+    ATUALIZA A INTERFACE
+    ============================================================
+  */
+
+  // Idade
+  document.getElementById("ageLunar").textContent =
+    ageLunar.toLocaleString("pt-BR");
+
+  document.getElementById("ageSolar").textContent =
+    ageSolar.toLocaleString("pt-BR");
+
+
+  // Mostruário do nascimento
   document.getElementById("birthSummaryText").textContent =
-    `Você nasceu em ${birthDateText}.`;
+    `Você nasceu em ${formatDateBR(birth)}.`;
+
   document.getElementById("birthSummaryLunar").textContent =
     `No calendário lunar: Ano ${lunarYear.toLocaleString("pt-BR")}, Lua ${cycle} de 13, Dia ${lunarDay}.`;
 
+
+  // Luas
   document.getElementById("lunas").innerHTML =
-    totalLunas.toLocaleString("pt-BR",{minimumFractionDigits:3,maximumFractionDigits:3}) +
+    totalLunas.toLocaleString("pt-BR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
+    }) +
     ' <span>luas</span>';
+
   document.getElementById("daysLine").textContent =
-    days.toLocaleString("pt-BR") + " dias transcorridos desde 01/01/0001";
+    birthDays.toLocaleString("pt-BR") +
+    " dias desde 01/01/0001";
 
-  document.getElementById("lunarYear").textContent = lunarYear.toLocaleString("pt-BR");
-  document.getElementById("cycle").textContent = cycle + " / 13";
-  document.getElementById("cycleDay").textContent = lunarDay + " / ~29,53";
-  document.getElementById("phaseMoon").textContent = emoji;
-  document.getElementById("phaseName").textContent = name;
-  document.getElementById("phaseDesc").textContent = desc;
 
+  // Informações lunares
+  document.getElementById("lunarYear").textContent =
+    lunarYear.toLocaleString("pt-BR");
+
+  document.getElementById("cycle").textContent =
+    cycle + " / 13";
+
+  document.getElementById("cycleDay").textContent =
+    lunarDay + " / ~29,53";
+
+
+  // Fase
+  document.getElementById("phaseMoon").textContent =
+    emoji;
+
+  document.getElementById("phaseName").textContent =
+    phaseName;
+
+  document.getElementById("phaseDesc").textContent =
+    phaseDesc;
+
+
+  // Hoje
   document.getElementById("todayGregorian").textContent =
     formatDateBR(today);
+
   document.getElementById("todayLunar").textContent =
     `Ano ${todayLunarYear.toLocaleString("pt-BR")} • Lua ${todayCycle}/13 • Dia ${todayLunarDay}`;
 
-  document.getElementById("nextBirthday").textContent = nextDateText;
+
+  // Próximo aniversário
+  document.getElementById("nextBirthday").textContent =
+    nextBirthdayDate;
+
   document.getElementById("birthdayMeta").textContent =
-    `Ano Lunar ${nextYearLunar.toLocaleString("pt-BR")} • Lua ${cycle}/13 • Dia ${lunarDay}`;
+    `Ano Lunar ${nextBirthdayYear.toLocaleString("pt-BR")} • mesma Lua ${cycle}/13 • Dia ${lunarDay}`;
 
   document.getElementById("nextBirthdayGregorian").textContent =
-    nextDateText;
+    nextBirthdayDate;
+
   document.getElementById("nextBirthdayLunar").textContent =
-    `Ano ${nextYearLunar.toLocaleString("pt-BR")} • Lua ${cycle}/13 • Dia ${lunarDay}`;
+    `Ano ${nextBirthdayYear.toLocaleString("pt-BR")} • Lua ${cycle}/13 • Dia ${lunarDay}`;
 
   document.getElementById("birthdayExplain").textContent =
-    `13 luas = ${lunarYearLength.toFixed(3).replace(".", ",")} dias. ` +
-    `O próximo aniversário lunar acontecerá aproximadamente ${Math.round(solarAdvance)} dias a partir de hoje no calendário normal.`;
+    `13 ciclos lunares = ${LUNAR_YEAR_LENGTH.toFixed(3).replace(".", ",")} dias. ` +
+    `Seu próximo aniversário lunar ocorrerá em aproximadamente ${Math.max(0, Math.round(daysUntil))} dias.`;
+
 
   error.style.display = "none";
   results.style.display = "block";
 }
 
-document.getElementById("calc").addEventListener("click", calculate);
-document.getElementById("birth").addEventListener("keydown", e => {
-  if(e.key === "Enter") calculate();
-});
 
-// Exemplo inicial: data atual, para a calculadora abrir já demonstrando o sistema.
+/*
+  ============================================================
+  EVENTOS
+  ============================================================
+*/
+
+document.getElementById("calc")
+  .addEventListener("click", calculate);
+
+document.getElementById("birth")
+  .addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      calculate();
+    }
+  });
+
+
+/*
+  Exemplo inicial.
+  Pode apagar esta linha se quiser deixar o campo vazio.
+*/
 document.getElementById("birth").value = "2026-08-10";
+
 </script>
 </body>
 </html>
