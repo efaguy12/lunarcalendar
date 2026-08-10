@@ -44,6 +44,37 @@ button{
 }
 button:hover{filter:brightness(1.08)}
 
+.monthsIntro{
+  margin-bottom:20px;padding:18px 18px 16px;border:1px solid rgba(155,130,215,.28);
+  border-radius:17px;background:linear-gradient(145deg,rgba(155,130,215,.08),rgba(10,14,28,.42));
+}
+.monthsIntroTitle{
+  color:var(--gold);font-size:13px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;
+}
+.monthsIntroText{
+  color:var(--muted);font-size:12px;line-height:1.5;margin:6px 0 12px;
+}
+.monthsIntroText strong{color:var(--text)}
+.monthsTable{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  border:1px solid var(--line);border-radius:11px;overflow:hidden;
+  background:var(--line);
+}
+.monthRow{
+  display:contents;
+}
+.monthRow span{
+  background:rgba(8,12,25,.82);padding:7px 10px;
+  color:var(--muted);font-size:11px;
+}
+.monthRow span:nth-child(2){color:var(--text);font-weight:600}
+.monthHeader span{
+  background:#202642;color:var(--gold);font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;
+}
+.monthNova span{background:rgba(230,189,104,.09);color:var(--gold)!important;font-weight:800!important}
+
 .agePreview{
   margin-top:10px;padding:12px 14px;border:1px solid var(--line);
   border-radius:12px;background:rgba(10,14,28,.55);
@@ -124,12 +155,44 @@ button:hover{filter:brightness(1.08)}
 .birthdayMeta{font-size:13px;color:var(--text)}
 .birthdayExplain{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
 
+.finalHighlight{
+  margin-top:18px;padding:24px 20px;border-radius:20px;
+  border:1px solid rgba(112,201,190,.45);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(112,201,190,.20),transparent 55%),
+    linear-gradient(145deg,#142c35,#17233a);
+  box-shadow:0 14px 40px rgba(0,0,0,.22);
+  text-align:center;
+}
+.finalHighlightIcon{font-size:34px;margin-bottom:4px}
+.finalHighlightTitle{
+  color:#8de0d3;font-size:12px;font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:17px;
+}
+.finalHighlightGrid{
+  display:grid;grid-template-columns:1fr 1.35fr 1.35fr;gap:12px;
+}
+.highlightItem{
+  padding:15px 12px;border:1px solid rgba(141,224,211,.18);
+  border-radius:14px;background:rgba(4,15,22,.28);
+}
+.highlightWide{background:rgba(230,189,104,.08);border-color:rgba(230,189,104,.24)}
+.highlightLabel{
+  color:#aebbc0;font-size:10px;text-transform:uppercase;
+  letter-spacing:1px;line-height:1.35;
+}
+.highlightValue{
+  color:#f5f2e9;font-size:25px;font-weight:800;margin-top:7px;line-height:1.15;
+}
+.highlightDate{color:#e6bd68;font-size:19px}
+.highlightUnit{color:#87999f;font-size:10px;margin-top:5px}
 .note{margin-top:16px;color:#989bb0;font-size:11px;line-height:1.55;text-align:center}
 
 @media(max-width:680px){
   .form{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
   .currentDateGrid,.birthdayCalendarGrid{grid-template-columns:1fr}
+  .finalHighlightGrid{grid-template-columns:1fr}
   button{width:100%}
   .big{font-size:38px}
 }
@@ -149,6 +212,33 @@ button:hover{filter:brightness(1.08)}
 </header>
 
 <main class="card">
+
+  <div class="monthsIntro">
+    <div class="monthsIntroTitle">🌙 Os 13 meses lunares</div>
+    <div class="monthsIntroText">
+      Cada ano lunar é formado por <strong>13 ciclos lunares</strong>.
+      Os primeiros 12 recebem nomes em sequência latina; o 13º é <strong>Nova</strong>.
+    </div>
+
+    <div class="monthsTable">
+      <div class="monthRow monthHeader">
+        <span>Ciclo</span><span>Nome</span>
+      </div>
+      <div class="monthRow"><span>01</span><span>Prima</span></div>
+      <div class="monthRow"><span>02</span><span>Secunda</span></div>
+      <div class="monthRow"><span>03</span><span>Tertia</span></div>
+      <div class="monthRow"><span>04</span><span>Quarta</span></div>
+      <div class="monthRow"><span>05</span><span>Quinta</span></div>
+      <div class="monthRow"><span>06</span><span>Sexta</span></div>
+      <div class="monthRow"><span>07</span><span>Septima</span></div>
+      <div class="monthRow"><span>08</span><span>Octava</span></div>
+      <div class="monthRow"><span>09</span><span>Nona</span></div>
+      <div class="monthRow"><span>10</span><span>Decima</span></div>
+      <div class="monthRow"><span>11</span><span>Undecima</span></div>
+      <div class="monthRow"><span>12</span><span>Duodecima</span></div>
+      <div class="monthRow monthNova"><span>13</span><span>Nova</span></div>
+    </div>
+  </div>
 
   <div class="form">
     <div>
@@ -207,9 +297,9 @@ button:hover{filter:brightness(1.08)}
         <div class="small">13 ciclos por ano</div>
       </div>
       <div class="metric">
-        <div class="label">Ciclo atual</div>
+        <div class="label">Mês lunar</div>
         <div class="value" id="cycle">— / 13</div>
-        <div class="small">ciclo lunar dentro do ano</div>
+        <div class="small">um dos 13 meses lunares</div>
       </div>
       <div class="metric">
         <div class="label">Dia do ciclo</div>
@@ -259,6 +349,31 @@ button:hover{filter:brightness(1.08)}
       <div class="birthdayExplain" id="birthdayExplain">—</div>
     </div>
 
+    <div class="finalHighlight">
+      <div class="finalHighlightIcon">🌙</div>
+      <div class="finalHighlightTitle">Seu resumo lunar</div>
+
+      <div class="finalHighlightGrid">
+        <div class="highlightItem">
+          <div class="highlightLabel">Sua idade lunar</div>
+          <div class="highlightValue" id="summaryAgeLunar">—</div>
+          <div class="highlightUnit">anos lunares</div>
+        </div>
+
+        <div class="highlightItem">
+          <div class="highlightLabel">Seu nascimento lunar</div>
+          <div class="highlightValue highlightDate" id="summaryBirthLunar">—</div>
+          <div class="highlightUnit">ano • lua • dia</div>
+        </div>
+
+        <div class="highlightItem highlightWide">
+          <div class="highlightLabel">Seu próximo aniversário no calendário gregoriano</div>
+          <div class="highlightValue highlightDate" id="summaryNextGregorian">—</div>
+          <div class="highlightUnit">dia / mês / ano</div>
+        </div>
+      </div>
+    </div>
+
     <div class="note">
       Modelo matemático usado nesta calculadora: 1 ciclo lunar = 29,530588853 dias
       (mês sinódico médio) e 13 ciclos = 1 ano lunar. Os ensinamentos aqui apresentados
@@ -279,6 +394,26 @@ button:hover{filter:brightness(1.08)}
 const SYNODIC = 29.530588853;
 const CYCLES_PER_YEAR = 13;
 const LUNAR_YEAR_LENGTH = SYNODIC * CYCLES_PER_YEAR;
+
+const LUNAR_MONTH_NAMES = [
+  "Prima",
+  "Secunda",
+  "Tertia",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Septima",
+  "Octava",
+  "Nona",
+  "Decima",
+  "Undecima",
+  "Duodecima",
+  "Nova"
+];
+
+function lunarMonthName(cycle) {
+  return LUNAR_MONTH_NAMES[cycle - 1] || "Nova";
+}
 
 
 /*
@@ -623,7 +758,7 @@ function calculate() {
     ) + 1;
 
   const nextBirthdayDate =
-    formatDateBR(nextBirthday);
+    `${String(nextBirthday.d).padStart(2, "0")}/${String(nextBirthday.m).padStart(2, "0")}/${nextBirthday.y}`;
 
   const daysUntil =
     nextBirthdayDays - todayDays;
@@ -648,7 +783,7 @@ function calculate() {
     `Você nasceu em ${formatDateBR(birth)}.`;
 
   document.getElementById("birthSummaryLunar").textContent =
-    `No calendário lunar: Ano ${lunarYear.toLocaleString("pt-BR")}, Lua ${cycle} de 13, Dia ${lunarDay}.`;
+    `No calendário lunar: Ano ${lunarYear.toLocaleString("pt-BR")}, ${lunarMonthName(cycle)}, Dia ${lunarDay}.`;
 
 
   // Luas
@@ -691,7 +826,7 @@ function calculate() {
     formatDateBR(today);
 
   document.getElementById("todayLunar").textContent =
-    `Ano ${todayLunarYear.toLocaleString("pt-BR")} • Lua ${todayCycle}/13 • Dia ${todayLunarDay}`;
+    `Ano ${todayLunarYear.toLocaleString("pt-BR")} • ${lunarMonthName(todayCycle)} • Dia ${todayLunarDay}`;
 
 
   // Próximo aniversário
@@ -699,17 +834,27 @@ function calculate() {
     nextBirthdayDate;
 
   document.getElementById("birthdayMeta").textContent =
-    `Ano Lunar ${nextBirthdayYear.toLocaleString("pt-BR")} • mesma Lua ${cycle}/13 • Dia ${lunarDay}`;
+    `Ano Lunar ${nextBirthdayYear.toLocaleString("pt-BR")} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
 
   document.getElementById("nextBirthdayGregorian").textContent =
     nextBirthdayDate;
 
   document.getElementById("nextBirthdayLunar").textContent =
-    `Ano ${nextBirthdayYear.toLocaleString("pt-BR")} • Lua ${cycle}/13 • Dia ${lunarDay}`;
+    `Ano ${nextBirthdayYear.toLocaleString("pt-BR")} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
 
   document.getElementById("birthdayExplain").textContent =
     `13 ciclos lunares = ${LUNAR_YEAR_LENGTH.toFixed(3).replace(".", ",")} dias. ` +
     `Seu próximo aniversário lunar ocorrerá em aproximadamente ${Math.max(0, Math.round(daysUntil))} dias.`;
+
+  // Resumo principal em destaque
+  document.getElementById("summaryAgeLunar").textContent =
+    ageLunar.toLocaleString("pt-BR");
+
+  document.getElementById("summaryBirthLunar").textContent =
+    `Ano ${lunarYear} • ${lunarMonthName(cycle)} • Dia ${lunarDay}`;
+
+  document.getElementById("summaryNextGregorian").textContent =
+    `${String(nextBirthday.d).padStart(2, "0")}/${String(nextBirthday.m).padStart(2, "0")}/${nextBirthday.y}`;
 
 
   error.style.display = "none";
