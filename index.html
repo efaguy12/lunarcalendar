@@ -53,6 +53,21 @@
   }
   button:hover{filter:brightness(1.08)}
   .results{display:none;margin-top:24px}
+  .birthSummary{
+    text-align:center;padding:22px 18px;margin-bottom:14px;
+    border:1px solid rgba(155,130,215,.35);border-radius:18px;
+    background:linear-gradient(135deg,rgba(155,130,215,.12),rgba(230,189,104,.07));
+  }
+  .birthSummaryIcon{font-size:30px;margin-bottom:5px}
+  .birthSummaryLabel{
+    font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted)
+  }
+  .birthSummaryText{
+    font-size:25px;font-weight:700;color:var(--text);margin:7px 0 5px
+  }
+  .birthSummaryLunar{
+    font-size:15px;color:var(--gold);font-weight:600
+  }
   .hero{
     text-align:center;padding:24px 18px;margin-bottom:14px;
     border:1px solid #363c5b;border-radius:18px;
@@ -166,6 +181,14 @@
     <div id="error" class="error"></div>
 
     <section id="results" class="results">
+
+      <div class="birthSummary">
+        <div class="birthSummaryIcon">🌙</div>
+        <div class="birthSummaryLabel">Sua data de nascimento</div>
+        <div class="birthSummaryText" id="birthSummaryText">Você nasceu em —</div>
+        <div class="birthSummaryLunar" id="birthSummaryLunar">No calendário lunar: —</div>
+      </div>
+
       <div class="hero">
         <div class="eyebrow">Valor em luas desde o Ano 01</div>
         <div class="big" id="lunas">— <span>luas</span></div>
@@ -213,7 +236,7 @@
       </div>
 
       <div class="birthday">
-        <div class="birthdayTitle">🎂 Próximo aniversário lunar</div>
+        <div class="birthdayTitle">🎂 Seu próximo aniversário lunar</div>
         <div class="birthdayDate" id="nextBirthday">—</div>
         <div class="birthdayMeta" id="birthdayMeta">—</div>
         <div class="birthdayCalendarGrid">
@@ -317,6 +340,9 @@ function calculate(){
   const days = daysFromYear1(y,m,d);
   const totalLunas = days / SYNODIC;
 
+  const birthDateObj = {y,m,d};
+  const birthDateText = formatDateBR(birthDateObj);
+
   // A primeira lua é o intervalo [0, 1) e o primeiro ano lunar é 1.
   const lunarYear = Math.floor(totalLunas / CYCLES_PER_YEAR) + 1;
   const cycleZero = totalLunas % CYCLES_PER_YEAR;
@@ -359,6 +385,11 @@ function calculate(){
   const todayCycle = Math.floor(todayCycleZero) + 1;
   const todayDayInCycle = (todayCycleZero - Math.floor(todayCycleZero)) * SYNODIC;
   const todayLunarDay = Math.floor(todayDayInCycle) + 1;
+
+  document.getElementById("birthSummaryText").textContent =
+    `Você nasceu em ${birthDateText}.`;
+  document.getElementById("birthSummaryLunar").textContent =
+    `No calendário lunar: Ano ${lunarYear.toLocaleString("pt-BR")}, Lua ${cycle} de 13, Dia ${lunarDay}.`;
 
   document.getElementById("lunas").innerHTML =
     totalLunas.toLocaleString("pt-BR",{minimumFractionDigits:3,maximumFractionDigits:3}) +
