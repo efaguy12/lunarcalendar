@@ -159,6 +159,10 @@
       <div>
         <label for="birth">Data de nascimento</label>
         <input id="birth" type="date" min="0001-01-01" max="9999-12-31">
+        <div class="agePreview">
+  <div>🌙 Você tem <strong id="ageLunar">—</strong> anos lunares</div>
+  <div>☀️ Você tem <strong id="ageSolar">—</strong> anos no calendário comum</div>
+</div>
       </div>
       <button id="calc">Calcular</button>
     </div>
@@ -339,6 +343,47 @@ function calculate(){
 
   const days = daysFromYear1(y,m,d);
   const totalLunas = days / SYNODIC;
+
+  // CALCULAR IDADE
+const now = new Date();
+
+const today = {
+  y: now.getFullYear(),
+  m: now.getMonth() + 1,
+  d: now.getDate()
+};
+
+const todayDays = daysFromYear1(
+  today.y,
+  today.m,
+  today.d
+);
+
+const ageDays = Math.max(0, todayDays - days);
+
+// 1 ano lunar = 13 ciclos de 29,530588853 dias
+const lunarYearLength = SYNODIC * CYCLES_PER_YEAR;
+
+// Idade em anos lunares completos
+const ageLunar = Math.floor(
+  ageDays / lunarYearLength
+);
+
+// Idade em anos do calendário comum
+let ageSolar = today.y - y;
+
+if (
+  today.m < m ||
+  (today.m === m && today.d < d)
+) {
+  ageSolar--;
+}
+
+document.getElementById("ageLunar").textContent =
+  ageLunar.toLocaleString("pt-BR");
+
+document.getElementById("ageSolar").textContent =
+  ageSolar.toLocaleString("pt-BR");
 
   const birthDateObj = {y,m,d};
   const birthDateText = formatDateBR(birthDateObj);
