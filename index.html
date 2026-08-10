@@ -44,36 +44,45 @@ button{
 }
 button:hover{filter:brightness(1.08)}
 
-.monthsIntro{
-  margin-bottom:20px;padding:18px 18px 16px;border:1px solid rgba(155,130,215,.28);
-  border-radius:17px;background:linear-gradient(145deg,rgba(155,130,215,.08),rgba(10,14,28,.42));
+.monthsFloating{
+  position:fixed;right:24px;top:24px;z-index:1000;
 }
-.monthsIntroTitle{
-  color:var(--gold);font-size:13px;font-weight:800;
-  text-transform:uppercase;letter-spacing:1.5px;
+.monthsToggle{
+  height:auto;padding:10px 13px;border:1px solid rgba(230,189,104,.38);
+  border-radius:12px;background:rgba(20,24,43,.94);color:var(--gold);
+  font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28);
 }
-.monthsIntroText{
-  color:var(--muted);font-size:12px;line-height:1.5;margin:6px 0 12px;
+.monthsToggle:hover{filter:brightness(1.1)}
+.toggleHint{
+  display:block;color:var(--muted);font-size:9px;font-weight:500;margin-top:2px;
 }
-.monthsIntroText strong{color:var(--text)}
+.monthsPanel{
+  position:absolute;right:0;top:48px;width:230px;padding:14px;
+  border:1px solid rgba(155,130,215,.42);border-radius:15px;
+  background:rgba(14,18,35,.98);box-shadow:0 18px 50px rgba(0,0,0,.42);
+}
+.monthsPanelTitle{
+  color:var(--gold);font-size:12px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.monthsPanelText{color:var(--muted);font-size:10px;margin:4px 0 9px}
 .monthsTable{
-  display:grid;grid-template-columns:1fr 1fr;gap:1px;
-  border:1px solid var(--line);border-radius:11px;overflow:hidden;
-  background:var(--line);
+  display:grid;grid-template-columns:42px 1fr;gap:1px;
+  border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--line);
 }
-.monthRow{
-  display:contents;
-}
+.monthRow{display:contents}
 .monthRow span{
-  background:rgba(8,12,25,.82);padding:7px 10px;
-  color:var(--muted);font-size:11px;
+  background:rgba(8,12,25,.96);padding:5px 7px;color:var(--muted);font-size:10px;
 }
 .monthRow span:nth-child(2){color:var(--text);font-weight:600}
-.monthHeader span{
-  background:#202642;color:var(--gold);font-weight:700;
-  text-transform:uppercase;letter-spacing:.8px;
+.monthHeader span{background:#202642;color:var(--gold);font-weight:700}
+.monthNova span{background:rgba(230,189,104,.10);color:var(--gold)!important;font-weight:800!important}
+.monthsClose{
+  width:100%;height:32px;margin-top:9px;border:1px solid var(--line);
+  border-radius:8px;background:rgba(255,255,255,.04);color:var(--muted);
+  font-size:11px;cursor:pointer;
 }
-.monthNova span{background:rgba(230,189,104,.09);color:var(--gold)!important;font-weight:800!important}
+.monthsClose:hover{color:var(--text)}
 
 .agePreview{
   margin-top:10px;padding:12px 14px;border:1px solid var(--line);
@@ -193,6 +202,8 @@ button:hover{filter:brightness(1.08)}
   .grid{grid-template-columns:1fr}
   .currentDateGrid,.birthdayCalendarGrid{grid-template-columns:1fr}
   .finalHighlightGrid{grid-template-columns:1fr}
+  .monthsFloating{right:12px;top:12px}
+  .monthsPanel{width:220px}
   button{width:100%}
   .big{font-size:38px}
 }
@@ -213,30 +224,37 @@ button:hover{filter:brightness(1.08)}
 
 <main class="card">
 
-  <div class="monthsIntro">
-    <div class="monthsIntroTitle">🌙 Os 13 meses lunares</div>
-    <div class="monthsIntroText">
-      Cada ano lunar é formado por <strong>13 ciclos lunares</strong>.
-      Os primeiros 12 recebem nomes em sequência latina; o 13º é <strong>Nova</strong>.
-    </div>
+  <div class="monthsFloating">
+    <button class="monthsToggle" id="monthsToggle" type="button"
+            aria-expanded="false" aria-controls="monthsPanel">
+      🌙 Ver os 13 meses
+      <span class="toggleHint">clique para abrir</span>
+    </button>
 
-    <div class="monthsTable">
-      <div class="monthRow monthHeader">
-        <span>Ciclo</span><span>Nome</span>
+    <div class="monthsPanel" id="monthsPanel" hidden>
+      <div class="monthsPanelTitle">Os 13 meses lunares</div>
+      <div class="monthsPanelText">
+        13 ciclos formam 1 ano lunar.
       </div>
-      <div class="monthRow"><span>01</span><span>Prima (01)</span></div>
-      <div class="monthRow"><span>02</span><span>Secunda (02)</span></div>
-      <div class="monthRow"><span>03</span><span>Tertia (03)</span></div>
-      <div class="monthRow"><span>04</span><span>Quarta (04)</span></div>
-      <div class="monthRow"><span>05</span><span>Quinta (05)</span></div>
-      <div class="monthRow"><span>06</span><span>Sexta (06)</span></div>
-      <div class="monthRow"><span>07</span><span>Septima (07)</span></div>
-      <div class="monthRow"><span>08</span><span>Octava (08)</span></div>
-      <div class="monthRow"><span>09</span><span>Nona (09)</span></div>
-      <div class="monthRow"><span>10</span><span>Decima (10)</span></div>
-      <div class="monthRow"><span>11</span><span>Undecima (11)</span></div>
-      <div class="monthRow"><span>12</span><span>Duodecima (12)</span></div>
-      <div class="monthRow monthNova"><span>13</span><span>Nova</span></div>
+
+      <div class="monthsTable">
+        <div class="monthRow monthHeader"><span>Nº</span><span>Nome</span></div>
+        <div class="monthRow"><span>01</span><span>Prima (01)</span></div>
+        <div class="monthRow"><span>02</span><span>Secunda (02)</span></div>
+        <div class="monthRow"><span>03</span><span>Tertia (03)</span></div>
+        <div class="monthRow"><span>04</span><span>Quarta (04)</span></div>
+        <div class="monthRow"><span>05</span><span>Quinta (05)</span></div>
+        <div class="monthRow"><span>06</span><span>Sexta (06)</span></div>
+        <div class="monthRow"><span>07</span><span>Septima (07)</span></div>
+        <div class="monthRow"><span>08</span><span>Octava (08)</span></div>
+        <div class="monthRow"><span>09</span><span>Nona (09)</span></div>
+        <div class="monthRow"><span>10</span><span>Decima (10)</span></div>
+        <div class="monthRow"><span>11</span><span>Undecima (11)</span></div>
+        <div class="monthRow"><span>12</span><span>Duodecima (12)</span></div>
+        <div class="monthRow monthNova"><span>13</span><span>Nova (13)</span></div>
+      </div>
+
+      <button class="monthsClose" id="monthsClose" type="button">Fechar ×</button>
     </div>
   </div>
 
@@ -861,6 +879,39 @@ function calculate() {
   error.style.display = "none";
   results.style.display = "block";
 }
+
+
+/*
+  ============================================================
+  PAINEL DOS 13 MESES
+  ============================================================
+*/
+const monthsToggle = document.getElementById("monthsToggle");
+const monthsPanel = document.getElementById("monthsPanel");
+const monthsClose = document.getElementById("monthsClose");
+
+function openMonthsPanel(){
+  monthsPanel.hidden = false;
+  monthsToggle.setAttribute("aria-expanded", "true");
+}
+
+function closeMonthsPanel(){
+  monthsPanel.hidden = true;
+  monthsToggle.setAttribute("aria-expanded", "false");
+}
+
+monthsToggle.addEventListener("click", function(){
+  if (monthsPanel.hidden) openMonthsPanel();
+  else closeMonthsPanel();
+});
+
+monthsClose.addEventListener("click", closeMonthsPanel);
+
+document.addEventListener("click", function(event){
+  if (!monthsPanel.contains(event.target) && !monthsToggle.contains(event.target)){
+    closeMonthsPanel();
+  }
+});
 
 
 /*
