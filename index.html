@@ -239,18 +239,18 @@ button:hover{filter:brightness(1.08)}
 
       <div class="monthsTable">
         <div class="monthRow monthHeader"><span>Nº</span><span>Nome</span></div>
-        <div class="monthRow"><span>01</span><span>Prima (01)</span></div>
-        <div class="monthRow"><span>02</span><span>Secunda (02)</span></div>
-        <div class="monthRow"><span>03</span><span>Tertia (03)</span></div>
-        <div class="monthRow"><span>04</span><span>Quarta (04)</span></div>
-        <div class="monthRow"><span>05</span><span>Quinta (05)</span></div>
-        <div class="monthRow"><span>06</span><span>Sexta (06)</span></div>
-        <div class="monthRow"><span>07</span><span>Septima (07)</span></div>
-        <div class="monthRow"><span>08</span><span>Octava (08)</span></div>
-        <div class="monthRow"><span>09</span><span>Nona (09)</span></div>
-        <div class="monthRow"><span>10</span><span>Decima (10)</span></div>
-        <div class="monthRow"><span>11</span><span>Undecima (11)</span></div>
-        <div class="monthRow"><span>12</span><span>Duodecima (12)</span></div>
+        <div class="monthRow"><span>01</span><span>Prima Lua (01)</span></div>
+        <div class="monthRow"><span>02</span><span>Secunda Lua (02)</span></div>
+        <div class="monthRow"><span>03</span><span>Tertia Lua (03)</span></div>
+        <div class="monthRow"><span>04</span><span>Quarta Lua (04)</span></div>
+        <div class="monthRow"><span>05</span><span>Quinta Lua (05)</span></div>
+        <div class="monthRow"><span>06</span><span>Sexta Lua (06)</span></div>
+        <div class="monthRow"><span>07</span><span>Septima Lua (07)</span></div>
+        <div class="monthRow"><span>08</span><span>Octava Lua (08)</span></div>
+        <div class="monthRow"><span>09</span><span>Nona Lua (09)</span></div>
+        <div class="monthRow"><span>10</span><span>Decima Lua (10)</span></div>
+        <div class="monthRow"><span>11</span><span>Undecima Lua (11)</span></div>
+        <div class="monthRow"><span>12</span><span>Duodecima Lua (12)</span></div>
         <div class="monthRow monthNova"><span>13</span><span>Nova (13)</span></div>
       </div>
 
@@ -431,7 +431,7 @@ const LUNAR_MONTH_NAMES = [
 
 function lunarMonthName(cycle) {
   const name = LUNAR_MONTH_NAMES[cycle - 1] || "Nova";
-  return `${name} (${String(cycle).padStart(2, "0")})`;
+  return `${name} Lua (${String(cycle).padStart(2, "0")})`;
 }
 
 
